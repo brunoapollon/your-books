@@ -11,6 +11,21 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "import/prefer-default-export": "off",
+    "class-methods-use-this": "off",
+    "indent": "off"
+  },
+  "import/extensions": [
+    "error",
+    "ignorePackages",
+    {
+      "ts": "never"
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
   }
 }
