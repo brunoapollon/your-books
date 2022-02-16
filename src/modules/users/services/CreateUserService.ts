@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+import { plainToClass } from 'class-transformer';
 import { User } from '../infra/typeorm/entities/User';
 import { UserRepository } from '../infra/typeorm/repositories/UserRepository';
 import { BCryptHashProvider } from '../providers/HashPasswordProvider/implements/BCryptsHashPasswordProvider';
@@ -38,7 +39,9 @@ class CreateUserService {
       password: paswordHashed,
     });
 
-    return createdUser;
+    const user = plainToClass(User, createdUser);
+
+    return user;
   }
 }
 

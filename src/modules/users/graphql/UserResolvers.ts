@@ -5,6 +5,7 @@ import { CreateUserInput } from './inputs/CreateUserInput';
 import { ContextParamMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ShowUserByEmailInput } from './inputs/ShowUserByEmailInput';
 import { CreateUserService } from '../services/CreateUserService';
+import { ShowUserByEmailService } from '../services/ShowUserByEmailService';
 
 @Resolver()
 export class userResolvers {
@@ -12,11 +13,9 @@ export class userResolvers {
   async showUserByEmail(
     @Args() { email }: ShowUserByEmailInput,
   ): Promise<User> {
-    const userRepository = new UserRepository();
+    const showUserByEmailService = new ShowUserByEmailService();
 
-    const user = await userRepository.findUserByEmail(email);
-
-    if (!user) throw new Error('user not found');
+    const user = await showUserByEmailService.execute({ email });
 
     return user;
   }
