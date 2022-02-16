@@ -1,1 +1,1 @@
-# graphql-ts
+# your bokks
