@@ -11,9 +11,9 @@ import {
 @Entity('users')
 @ObjectType()
 class User {
-  @Field(type => ID)
+  @Field(type => ID, { nullable: true })
   @PrimaryColumn('uuid')
-  readonly id: string;
+  id: string;
 
   @Field(type => String)
   @Column()

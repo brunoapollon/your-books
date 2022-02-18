@@ -33,6 +33,10 @@ class UserRepository implements IUserRepository {
       where: { email },
     });
   }
+
+  public async findUserById(id: string): Promise<User | undefined> {
+    return await this.ormRepository.findOne(id);
+  }
 }
 
 export { UserRepository };
