@@ -6,6 +6,9 @@ import { ContextParamMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ShowUserByEmailInput } from './inputs/ShowUserByEmailInput';
 import { CreateUserService } from '../services/CreateUserService';
 import { ShowUserByEmailService } from '../services/ShowUserByEmailService';
+import { AuthenticationInput } from './inputs/AuthenticationInput';
+import { AuthenticateUserService } from '../services/AuthenticateUserService';
+import { Authentication } from './models/Authentication';
 
 @Resolver()
 export class userResolvers {
@@ -34,5 +37,20 @@ export class userResolvers {
     });
 
     return createdUser;
+  }
+
+  @Mutation(() => Authentication)
+  public async userAuthenticatication(
+    @Arg('data') { email, password }: AuthenticationInput,
+    @Ctx() ctx: ContextParamMetadata,
+  ): Promise<Authentication> {
+    const authenticateUserService = new AuthenticateUserService();
+
+    const userAutenticated = authenticateUserService.execute({
+      email,
+      password,
+    });
+
+    return userAutenticated;
   }
 }
