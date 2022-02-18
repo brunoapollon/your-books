@@ -1,24 +1,33 @@
-import { Resolver, Query, Mutation, Arg, Ctx, Args } from 'type-graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Arg,
+  Ctx,
+  Args,
+  UseMiddleware,
+} from 'type-graphql';
 import { User } from '../infra/typeorm/entities/User';
-import { UserRepository } from '../infra/typeorm/repositories/UserRepository';
 import { CreateUserInput } from './inputs/CreateUserInput';
 import { ContextParamMetadata } from 'type-graphql/dist/metadata/definitions';
-import { ShowUserByEmailInput } from './inputs/ShowUserByEmailInput';
 import { CreateUserService } from '../services/CreateUserService';
-import { ShowUserByEmailService } from '../services/ShowUserByEmailService';
 import { AuthenticationInput } from './inputs/AuthenticationInput';
 import { AuthenticateUserService } from '../services/AuthenticateUserService';
 import { Authentication } from './models/Authentication';
+import { ensureAuthenticated } from '../infra/http/middlewares/ensuredAuthenticated';
+import { request } from 'express';
+import { ShowUserByIdService } from '../services/ShowUserByIdService';
 
 @Resolver()
 export class userResolvers {
   @Query(_returns => User)
-  async showUserByEmail(
-    @Args() { email }: ShowUserByEmailInput,
-  ): Promise<User> {
-    const showUserByEmailService = new ShowUserByEmailService();
+  @UseMiddleware(ensureAuthenticated)
+  async showUser(): Promise<User> {
+    const { id } = request.user;
 
-    const user = await showUserByEmailService.execute({ email });
+    const showUserByIdService = new ShowUserByIdService();
+
+    const user = await showUserByIdService.execute({ id });
 
     return user;
   }
