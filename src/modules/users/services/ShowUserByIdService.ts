@@ -2,7 +2,6 @@ import { plainToClass } from 'class-transformer';
 import { getCustomRepository } from 'typeorm';
 import { User } from '../infra/typeorm/entities/User';
 import { UserRepository } from '../infra/typeorm/repositories/UserRepository';
-import { BCryptHashProvider } from '../providers/HashPasswordProvider/implements/BCryptsHashPasswordProvider';
 
 interface IRequestShowUserByIdService {
   id: string;

@@ -37,6 +37,10 @@ class UserRepository implements IUserRepository {
   public async findUserById(id: string): Promise<User | undefined> {
     return await this.ormRepository.findOne(id);
   }
+
+  public async save(user: User): Promise<void> {
+    await this.ormRepository.save(user);
+  }
 }
 
 export { UserRepository };

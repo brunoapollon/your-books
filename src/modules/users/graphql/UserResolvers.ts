@@ -4,7 +4,6 @@ import {
   Mutation,
   Arg,
   Ctx,
-  Args,
   UseMiddleware,
 } from 'type-graphql';
 import { User } from '../infra/typeorm/entities/User';
@@ -17,6 +16,8 @@ import { Authentication } from './models/Authentication';
 import { ensureAuthenticated } from '../infra/http/middlewares/ensuredAuthenticated';
 import { request } from 'express';
 import { ShowUserByIdService } from '../services/ShowUserByIdService';
+import { UpdateUserInput } from './inputs/UpdateUserInput';
+import { UpdateUserService } from '../services/UpdateUserService';
 
 @Resolver()
 export class userResolvers {
@@ -46,6 +47,25 @@ export class userResolvers {
     });
 
     return createdUser;
+  }
+
+  @Mutation(() => User)
+  @UseMiddleware(ensureAuthenticated)
+  public async updateUser(
+    @Arg('data') { email, password, name }: UpdateUserInput,
+    @Ctx() ctx: ContextParamMetadata,
+  ): Promise<User> {
+    const { id } = request.user;
+    const updateUserService = new UpdateUserService();
+
+    const updatedUser = await updateUserService.execute({
+      id,
+      name,
+      email,
+      password,
+    });
+
+    return updatedUser;
   }
 
   @Mutation(() => Authentication)
