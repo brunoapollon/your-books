@@ -18,6 +18,7 @@ import { request } from 'express';
 import { ShowUserByIdService } from '../services/ShowUserByIdService';
 import { UpdateUserInput } from './inputs/UpdateUserInput';
 import { UpdateUserService } from '../services/UpdateUserService';
+import { DeleteUserService } from '../services/DeleteUserService';
 
 @Resolver()
 export class userResolvers {
@@ -56,6 +57,7 @@ export class userResolvers {
     @Ctx() ctx: ContextParamMetadata,
   ): Promise<User> {
     const { id } = request.user;
+
     const updateUserService = new UpdateUserService();
 
     const updatedUser = await updateUserService.execute({
@@ -66,6 +68,18 @@ export class userResolvers {
     });
 
     return updatedUser;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(ensureAuthenticated)
+  public async deleteUser(): Promise<Boolean> {
+    const { id } = request.user;
+
+    const deleteUserService = new DeleteUserService();
+
+    const resultDeleted = await deleteUserService.execute({ id });
+
+    return resultDeleted;
   }
 
   @Mutation(() => Authentication)
