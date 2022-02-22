@@ -15,20 +15,35 @@ class UserRepository implements IUserRepository {
     email,
     name,
     password,
-  }: ICreateUserDTO): Promise<User> {
+  }: ICreateUserDTO): Promise<User | undefined> {
     const createdUser = await this.ormRepository.create({
       email,
       name,
       password,
     });
-
     await this.ormRepository.save(createdUser);
 
-    return createdUser;
+    return await this.ormRepository.findOne({
+      where: { email },
+    });
   }
 
   public async findUserByEmail(email: string): Promise<User | undefined> {
-    return await this.ormRepository.findOne({ where: { email } });
+    return await this.ormRepository.findOne({
+      where: { email },
+    });
+  }
+
+  public async findUserById(id: string): Promise<User | undefined> {
+    return await this.ormRepository.findOne(id);
+  }
+
+  public async save(user: User): Promise<void> {
+    await this.ormRepository.save(user);
+  }
+
+  public async deleteUser(id: string): Promise<Boolean> {
+    return !!(await this.ormRepository.delete(id));
   }
 }
 

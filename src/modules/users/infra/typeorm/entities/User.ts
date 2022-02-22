@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from 'type-graphql';
+import { Exclude } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -10,7 +11,7 @@ import {
 @Entity('users')
 @ObjectType()
 class User {
-  @Field(type => ID)
+  @Field(type => ID, { nullable: true })
   @PrimaryColumn('uuid')
   id: string;
 
@@ -22,13 +23,14 @@ class User {
   @Column()
   email: string;
 
-  @Field(type => String)
+  @Exclude()
+  @Field(type => String, { nullable: true })
   @Column()
   password: string | '';
 
   @Field()
   @CreateDateColumn()
-  created_at: string;
+  created_at: Date;
 
   @Field()
   @UpdateDateColumn()
