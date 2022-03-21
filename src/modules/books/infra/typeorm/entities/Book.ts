@@ -1,3 +1,4 @@
+import { User } from '../../../../../modules/users/infra/typeorm/entities/User';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
   Column,
@@ -11,7 +12,7 @@ import {
 
 @Entity('books')
 @ObjectType()
-class User {
+class Book {
   @Field(type => ID, { nullable: true })
   @PrimaryColumn('uuid')
   id: string;
@@ -28,7 +29,7 @@ class User {
   @Column()
   author: string;
 
-  @Field(type => String)
+  @Field(type => User)
   @JoinColumn({ name: 'user_id' })
   @OneToOne(() => User, { eager: true })
   user_id: string;
@@ -42,4 +43,4 @@ class User {
   updated_at: Date;
 }
 
-export { User };
+export { Book };
