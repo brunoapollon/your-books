@@ -29,10 +29,19 @@ class Book {
   @Column()
   author: string;
 
+  @Field(type => Boolean)
+  @Column()
+  borrowed: Boolean;
+
   @Field(type => User)
   @JoinColumn({ name: 'user_id' })
   @OneToOne(() => User, { eager: true })
   user_id: string;
+
+  @Field(type => User)
+  @JoinColumn({ name: 'borrowed_user_id' })
+  @OneToOne(() => User, { eager: true })
+  borrowed_user_id: string;
 
   @Field()
   @CreateDateColumn()
