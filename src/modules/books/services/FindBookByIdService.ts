@@ -1,4 +1,3 @@
-import { UserRepository } from '../../../modules/users/infra/typeorm/repositories/UserRepository';
 import { getCustomRepository } from 'typeorm';
 import { BookRepository } from '../infra/typeorm/repositories/BookRepository';
 import { Book } from '../infra/typeorm/entities/Book';
@@ -9,7 +8,6 @@ interface IRequestFindBookByIdService {
 
 class FindBookByIdService {
   private bookRepository: BookRepository;
-  private userRepository: UserRepository;
 
   constructor() {
     this.bookRepository = getCustomRepository(BookRepository);
