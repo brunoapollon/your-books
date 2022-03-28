@@ -48,6 +48,14 @@ class BookRepository implements IBookRepository {
   public async save(book: Book): Promise<void> {
     await this.ormRepository.save(book);
   }
+
+  public async findBooksByUserId(id: string): Promise<Book[]> {
+    const findedBooksByUserId = await this.ormRepository.find({
+      where: { user_id: id },
+    });
+
+    return findedBooksByUserId;
+  }
 }
 
 export { BookRepository };
