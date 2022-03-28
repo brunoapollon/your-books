@@ -87,7 +87,6 @@ export class BookResolvers {
     const findedBooksByUserId = await findBooksByUserIdService.execute({
       user_id: id,
     });
-    console.log(id);
 
     return findedBooksByUserId;
   }
