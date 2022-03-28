@@ -41,7 +41,7 @@ class Book {
   @Field(type => User, { nullable: true })
   @JoinColumn({ name: 'borrowed_user_id' })
   @OneToOne(() => User, { eager: true })
-  borrowed_user_id: string;
+  borrowed_user_id: string | null;
 
   @Field()
   @CreateDateColumn()

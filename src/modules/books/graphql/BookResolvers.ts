@@ -16,6 +16,8 @@ import { BorrowBookInput } from './inputs/BorrowUsertInput';
 import { BorrowBookService } from '../services/BorrowBookService';
 import { FindBookByIdService } from '../services/FindBookByIdService';
 import { FindBooksByUserIdService } from '../services/FindBooksByUserIdService';
+import { BorrowedBookReturnService } from '../services/BorrowedBookReturnService';
+import { BorrowedBookReturnInput } from './inputs/BorrowedBookReturnInput';
 
 @Resolver()
 export class BookResolvers {
@@ -51,6 +53,24 @@ export class BookResolvers {
     const findBookByIdService = new FindBookByIdService();
 
     await borrowBookService.execute({ user_id: id, book_id, borrowed_user_id });
+
+    const book = await findBookByIdService.execute({ book_id });
+
+    return book;
+  }
+
+  @Mutation(() => Book)
+  @UseMiddleware(ensureAuthenticated)
+  public async borrowedBookReturn(
+    @Arg('data') { book_id }: BorrowedBookReturnInput,
+    @Ctx() ctx: ContextParamMetadata,
+  ): Promise<Book> {
+    const { id } = request.user;
+
+    const borrowedBookReturnService = new BorrowedBookReturnService();
+    const findBookByIdService = new FindBookByIdService();
+
+    await borrowedBookReturnService.execute({ user_id: id, book_id });
 
     const book = await findBookByIdService.execute({ book_id });
 
