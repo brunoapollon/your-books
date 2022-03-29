@@ -21,7 +21,7 @@ import { UpdateUserService } from '../services/UpdateUserService';
 import { DeleteUserService } from '../services/DeleteUserService';
 
 @Resolver()
-export class userResolvers {
+export class UserResolvers {
   @Query(_returns => User)
   @UseMiddleware(ensureAuthenticated)
   async showUser(): Promise<User> {
