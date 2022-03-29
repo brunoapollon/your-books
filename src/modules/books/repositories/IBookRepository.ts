@@ -8,4 +8,5 @@ export default interface IBookRepository {
   findBooksByUserId(id: string): Promise<Book[]>;
   borrowBook(data: IBorrowBookDTO): Promise<void>;
   save(book: Book): Promise<void>;
+  deleteBook(id: string): Promise<Boolean>;
 }

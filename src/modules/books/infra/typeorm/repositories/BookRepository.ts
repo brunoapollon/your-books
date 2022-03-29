@@ -56,6 +56,10 @@ class BookRepository implements IBookRepository {
 
     return findedBooksByUserId;
   }
+
+  public async deleteBook(id: string): Promise<Boolean> {
+    return !!this.ormRepository.delete(id);
+  }
 }
 
 export { BookRepository };

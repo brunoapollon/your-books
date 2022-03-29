@@ -17,7 +17,8 @@ import { BorrowBookService } from '../services/BorrowBookService';
 import { FindBookByIdService } from '../services/FindBookByIdService';
 import { FindBooksByUserIdService } from '../services/FindBooksByUserIdService';
 import { BorrowedBookReturnService } from '../services/BorrowedBookReturnService';
-import { BorrowedBookReturnInput } from './inputs/BorrowedBookReturnInput';
+import { BorrowedBookReturnAndDeleteInput } from './inputs/BorrowedBookReturnAndDeleteInput';
+import { DeleteBookService } from '../services/DeleteBookService';
 
 @Resolver()
 export class BookResolvers {
@@ -62,7 +63,7 @@ export class BookResolvers {
   @Mutation(() => Book)
   @UseMiddleware(ensureAuthenticated)
   public async borrowedBookReturn(
-    @Arg('data') { book_id }: BorrowedBookReturnInput,
+    @Arg('data') { book_id }: BorrowedBookReturnAndDeleteInput,
     @Ctx() ctx: ContextParamMetadata,
   ): Promise<Book> {
     const { id } = request.user;
@@ -89,5 +90,18 @@ export class BookResolvers {
     });
 
     return findedBooksByUserId;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(ensureAuthenticated)
+  public async deleteBook(
+    @Arg('data') { book_id }: BorrowedBookReturnAndDeleteInput,
+    @Ctx() ctx: ContextParamMetadata,
+  ): Promise<Boolean> {
+    const deleteBookService = new DeleteBookService();
+
+    const deleteResult = await deleteBookService.execute({ book_id });
+
+    return deleteResult;
   }
 }
