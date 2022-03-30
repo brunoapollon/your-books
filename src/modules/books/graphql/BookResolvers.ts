@@ -19,6 +19,8 @@ import { FindBooksByUserIdService } from '../services/FindBooksByUserIdService';
 import { BorrowedBookReturnService } from '../services/BorrowedBookReturnService';
 import { BorrowedBookReturnAndDeleteInput } from './inputs/BorrowedBookReturnAndDeleteInput';
 import { DeleteBookService } from '../services/DeleteBookService';
+import { UpdateBookInput } from './inputs/UpdateBookInput';
+import { UpdateBookService } from '../services/UpdateBookService';
 
 @Resolver()
 export class BookResolvers {
@@ -40,6 +42,27 @@ export class BookResolvers {
     });
 
     return createdBook;
+  }
+
+  @Mutation(() => Book)
+  @UseMiddleware(ensureAuthenticated)
+  public async updateBook(
+    @Arg('data') { book_id, title, description, author }: UpdateBookInput,
+    @Ctx() ctx: ContextParamMetadata,
+  ): Promise<Book> {
+    const { id } = request.user;
+
+    const updateBookService = new UpdateBookService();
+
+    const bookUpdated = await updateBookService.execute({
+      book_id,
+      user_id: id,
+      title,
+      description,
+      author,
+    });
+
+    return bookUpdated;
   }
 
   @Mutation(() => Book)
@@ -78,6 +101,19 @@ export class BookResolvers {
     return book;
   }
 
+  @Mutation(() => Boolean)
+  @UseMiddleware(ensureAuthenticated)
+  public async deleteBook(
+    @Arg('data') { book_id }: BorrowedBookReturnAndDeleteInput,
+    @Ctx() ctx: ContextParamMetadata,
+  ): Promise<Boolean> {
+    const deleteBookService = new DeleteBookService();
+
+    const deleteResult = await deleteBookService.execute({ book_id });
+
+    return deleteResult;
+  }
+
   @Query(() => [Book])
   @UseMiddleware(ensureAuthenticated)
   public async findBooksByUserId(): Promise<Book[]> {
@@ -92,16 +128,18 @@ export class BookResolvers {
     return findedBooksByUserId;
   }
 
-  @Mutation(() => Boolean)
+  @Query(() => Book)
   @UseMiddleware(ensureAuthenticated)
-  public async deleteBook(
+  public async findBookById(
     @Arg('data') { book_id }: BorrowedBookReturnAndDeleteInput,
     @Ctx() ctx: ContextParamMetadata,
-  ): Promise<Boolean> {
-    const deleteBookService = new DeleteBookService();
+  ): Promise<Book> {
+    const findBookByIdService = new FindBookByIdService();
 
-    const deleteResult = await deleteBookService.execute({ book_id });
+    const findedBookById = await findBookByIdService.execute({
+      book_id,
+    });
 
-    return deleteResult;
+    return findedBookById;
   }
 }

@@ -9,4 +9,5 @@ export default interface IBookRepository {
   borrowBook(data: IBorrowBookDTO): Promise<void>;
   save(book: Book): Promise<void>;
   deleteBook(id: string): Promise<Boolean>;
+  findBookByIdAndUserId(user_id: string, id: string): Promise<Book | undefined>;
 }
