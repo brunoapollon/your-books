@@ -34,8 +34,6 @@ class UpdateBookService {
     const permissionToEditBook =
       await this.bookRepository.findBookByIdAndUserId(user_id, book_id);
 
-    console.log(permissionToEditBook);
-
     if (!permissionToEditBook)
       throw new Error('you do not have permission to edit this book');
 
