@@ -19,6 +19,8 @@ import { FindBooksByUserIdService } from '../services/FindBooksByUserIdService';
 import { BorrowedBookReturnService } from '../services/BorrowedBookReturnService';
 import { BorrowedBookReturnAndDeleteInput } from './inputs/BorrowedBookReturnAndDeleteInput';
 import { DeleteBookService } from '../services/DeleteBookService';
+import { UpdateBookInput } from './inputs/UpdateBookInput';
+import { UpdateBookService } from '../services/UpdateBookService';
 
 @Resolver()
 export class BookResolvers {
@@ -40,6 +42,27 @@ export class BookResolvers {
     });
 
     return createdBook;
+  }
+
+  @Mutation(() => Book)
+  @UseMiddleware(ensureAuthenticated)
+  public async updateBook(
+    @Arg('data') { book_id, title, description, author }: UpdateBookInput,
+    @Ctx() ctx: ContextParamMetadata,
+  ): Promise<Book> {
+    const { id } = request.user;
+
+    const updateBookService = new UpdateBookService();
+
+    const bookUpdated = await updateBookService.execute({
+      book_id,
+      user_id: id,
+      title,
+      description,
+      author,
+    });
+
+    return bookUpdated;
   }
 
   @Mutation(() => Book)

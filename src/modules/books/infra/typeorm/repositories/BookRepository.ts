@@ -60,6 +60,17 @@ class BookRepository implements IBookRepository {
   public async deleteBook(id: string): Promise<Boolean> {
     return !!this.ormRepository.delete(id);
   }
+
+  public async findBookByIdAndUserId(
+    user_id: string,
+    id: string,
+  ): Promise<Book | undefined> {
+    const findedBook = await this.ormRepository.findOne({
+      where: { id, user_id },
+    });
+
+    return findedBook;
+  }
 }
 
 export { BookRepository };
