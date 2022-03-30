@@ -78,6 +78,19 @@ export class BookResolvers {
     return book;
   }
 
+  @Mutation(() => Boolean)
+  @UseMiddleware(ensureAuthenticated)
+  public async deleteBook(
+    @Arg('data') { book_id }: BorrowedBookReturnAndDeleteInput,
+    @Ctx() ctx: ContextParamMetadata,
+  ): Promise<Boolean> {
+    const deleteBookService = new DeleteBookService();
+
+    const deleteResult = await deleteBookService.execute({ book_id });
+
+    return deleteResult;
+  }
+
   @Query(() => [Book])
   @UseMiddleware(ensureAuthenticated)
   public async findBooksByUserId(): Promise<Book[]> {
@@ -92,16 +105,18 @@ export class BookResolvers {
     return findedBooksByUserId;
   }
 
-  @Mutation(() => Boolean)
+  @Query(() => Book)
   @UseMiddleware(ensureAuthenticated)
-  public async deleteBook(
+  public async findBookById(
     @Arg('data') { book_id }: BorrowedBookReturnAndDeleteInput,
     @Ctx() ctx: ContextParamMetadata,
-  ): Promise<Boolean> {
-    const deleteBookService = new DeleteBookService();
+  ): Promise<Book> {
+    const findBookByIdService = new FindBookByIdService();
 
-    const deleteResult = await deleteBookService.execute({ book_id });
+    const findedBookById = await findBookByIdService.execute({
+      book_id,
+    });
 
-    return deleteResult;
+    return findedBookById;
   }
 }
