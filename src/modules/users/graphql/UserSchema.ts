@@ -1,9 +1,9 @@
 import { buildSchema } from 'type-graphql';
-import { userResolvers } from './UserResolvers';
+import { UserResolvers } from './UserResolvers';
 
 async function buildUserSchema() {
   const userSchema = await buildSchema({
-    resolvers: [userResolvers],
+    resolvers: [UserResolvers],
   });
 
   return userSchema;
