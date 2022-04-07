@@ -41,6 +41,10 @@ export class BookResolvers {
       author,
     });
 
+    createdBook.user_id.password = null;
+    if (createdBook.borrowed_user_id != null)
+      createdBook.borrowed_user_id.password = null;
+
     return createdBook;
   }
 
@@ -62,6 +66,10 @@ export class BookResolvers {
       author,
     });
 
+    bookUpdated.user_id.password = null;
+    if (bookUpdated.borrowed_user_id != null)
+      bookUpdated.borrowed_user_id.password = null;
+
     return bookUpdated;
   }
 
@@ -80,6 +88,9 @@ export class BookResolvers {
 
     const book = await findBookByIdService.execute({ book_id });
 
+    book.user_id.password = null;
+    if (book.borrowed_user_id != null) book.borrowed_user_id.password = null;
+
     return book;
   }
 
@@ -97,6 +108,9 @@ export class BookResolvers {
     await borrowedBookReturnService.execute({ user_id: id, book_id });
 
     const book = await findBookByIdService.execute({ book_id });
+
+    book.user_id.password = null;
+    if (book.borrowed_user_id != null) book.borrowed_user_id.password = null;
 
     return book;
   }
@@ -125,6 +139,12 @@ export class BookResolvers {
       user_id: id,
     });
 
+    const findedBooksByUserIdWithoutPassword = findedBooksByUserId.map(book => {
+      book.user_id.password = null;
+      if (book.borrowed_user_id != null) book.borrowed_user_id.password = null;
+      return book;
+    });
+
     return findedBooksByUserId;
   }
 
@@ -139,6 +159,10 @@ export class BookResolvers {
     const findedBookById = await findBookByIdService.execute({
       book_id,
     });
+
+    findedBookById.user_id.password = null;
+    if (findedBookById.borrowed_user_id != null)
+      findedBookById.borrowed_user_id.password = null;
 
     return findedBookById;
   }
