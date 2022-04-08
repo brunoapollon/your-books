@@ -146,7 +146,7 @@ export class BookResolvers {
       return book;
     });
 
-    return findedBooksByUserId;
+    return findedBooksByUserIdWithoutPassword;
   }
 
   @Query(() => [Book])
@@ -168,7 +168,7 @@ export class BookResolvers {
       return book;
     });
 
-    return findedBooksByUserId;
+    return findedBooksByUserIdWithoutPassword;
   }
 
   @Query(() => Book)
