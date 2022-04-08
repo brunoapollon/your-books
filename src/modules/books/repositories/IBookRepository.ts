@@ -10,4 +10,5 @@ export default interface IBookRepository {
   save(book: Book): Promise<void>;
   deleteBook(id: string): Promise<Boolean>;
   findBookByIdAndUserId(user_id: string, id: string): Promise<Book | undefined>;
+  findByBorrowedBooksAndByUserId(user_id: string): Promise<Book[]>;
 }

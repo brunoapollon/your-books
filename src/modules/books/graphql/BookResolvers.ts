@@ -21,6 +21,7 @@ import { BorrowedBookReturnAndDeleteInput } from './inputs/BorrowedBookReturnAnd
 import { DeleteBookService } from '../services/DeleteBookService';
 import { UpdateBookInput } from './inputs/UpdateBookInput';
 import { UpdateBookService } from '../services/UpdateBookService';
+import { FilterByBorrowedBooksAndByUserIdService } from '../services/FilterByBorrowedBooksAndByUserIdService';
 
 @Resolver()
 export class BookResolvers {
@@ -138,6 +139,28 @@ export class BookResolvers {
     const findedBooksByUserId = await findBooksByUserIdService.execute({
       user_id: id,
     });
+
+    const findedBooksByUserIdWithoutPassword = findedBooksByUserId.map(book => {
+      book.user_id.password = null;
+      if (book.borrowed_user_id != null) book.borrowed_user_id.password = null;
+      return book;
+    });
+
+    return findedBooksByUserId;
+  }
+
+  @Query(() => [Book])
+  @UseMiddleware(ensureAuthenticated)
+  public async FilterByBorrowedBooksAndByUser(): Promise<Book[]> {
+    const { id } = request.user;
+
+    const filterByBorrowedBooksAndByUserIdService =
+      new FilterByBorrowedBooksAndByUserIdService();
+
+    const findedBooksByUserId =
+      await filterByBorrowedBooksAndByUserIdService.execute({
+        user_id: id,
+      });
 
     const findedBooksByUserIdWithoutPassword = findedBooksByUserId.map(book => {
       book.user_id.password = null;
