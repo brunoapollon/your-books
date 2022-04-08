@@ -16,4 +16,4 @@ Esse projeto é uma aplicação node com graphql feita para organizar a bibliote
 ## Instruções
 
 - Para instalar todas as dependências utilizadas do projeto basta rodar o comando `yarn`
-- O servidor pode ser iniciado com `yarn dev`, onde se tem acesso pelo `http://localhost:3333`
+- O servidor pode ser iniciado com `yarn dev`, onde se tem acesso pelo `http://localhost:3333/your-books-api`
