@@ -71,6 +71,16 @@ class BookRepository implements IBookRepository {
 
     return findedBook;
   }
+
+  public async findByBorrowedBooksAndByUserId(
+    user_id: string,
+  ): Promise<Book[]> {
+    const findedBooksByUserId = await this.ormRepository.find({
+      where: { user_id, borrowed: true },
+    });
+
+    return findedBooksByUserId;
+  }
 }
 
 export { BookRepository };
