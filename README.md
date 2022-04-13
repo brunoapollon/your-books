@@ -7,7 +7,7 @@ API criada para o gerenciamento de livros pessoais.
 - [Node](https://nodejs.org/en/)
 - [Typescript](https://www.typescriptlang.org)
 - [Graphql](https://graphql.org)
-- [PostgresSQL](https://www.postgresql.org)
+- [PostgreSQL](https://www.postgresql.org)
 
 ## Projeto
 
